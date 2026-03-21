@@ -62,10 +62,13 @@ export class YouTubeService {
 
   static async getVideoTitle(videoId: string): Promise<string> {
     try {
+      console.log(`[YouTubeService] Fetching title for ${videoId}...`);
       const response = await fetch(`/api/video-info?videoId=${videoId}`);
       
       if (!response.ok) {
-        throw new Error("Failed to fetch video title from internal API");
+        const errorData = await response.json();
+        console.error(`[YouTubeService] API error (${response.status}):`, errorData);
+        return "Untitled Lesson";
       }
 
       const data = await response.json();
@@ -73,10 +76,29 @@ export class YouTubeService {
         return data.title;
       }
     } catch (error) {
-      console.error("Error fetching video title:", error);
+      console.error("[YouTubeService] Network or unexpected error:", error);
     }
     
     return "Untitled Lesson";
+  }
+
+  static async saveUserVideo(userId: string, videoId: string): Promise<void> {
+    try {
+      const title = await this.getVideoTitle(videoId);
+      const videoData = {
+        videoId,
+        url: `https://www.youtube.com/watch?v=${videoId}`,
+        title,
+        source: 'youtube',
+        addedAt: Date.now()
+      };
+      
+      const docRef = doc(db, 'users', userId, 'videos', videoId);
+      await setDoc(docRef, videoData, { merge: true });
+      console.log(`[YouTubeService] Saved video ${videoId} for user ${userId}`);
+    } catch (error) {
+      console.error("[YouTubeService] Error saving user video:", error);
+    }
   }
 
   static extractVideoId(url: string): string | null {

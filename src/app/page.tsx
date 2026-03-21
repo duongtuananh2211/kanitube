@@ -8,7 +8,11 @@ import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestor
 import { db } from "@/firebase/config";
 import { UserVideo } from "@/types";
 import Link from 'next/link';
+import { YouTubeService } from "@/services/youtube";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
   const { user, signInWithGoogle, loading: authLoading } = useAuth();
   const [recentVideos, setRecentVideos] = useState<UserVideo[]>([]);
   const [videosLoading, setVideosLoading] = useState(true);
@@ -113,12 +117,18 @@ export default function Home() {
                 Paste a YouTube URL below to generate interactive Hán-Việt subtitles.
               </p>
               <form 
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
                   const url = formData.get('url') as string;
-                  const videoId = /v=([^&]+)/.exec(url)?.[1] || /youtu\.be\/([^?]+)/.exec(url)?.[1];
-                  if (videoId) window.location.href = `/watch/${videoId}`;
+                  const videoId = YouTubeService.extractVideoId(url);
+                  
+                  if (videoId) {
+                    if (user) {
+                      await YouTubeService.saveUserVideo(user.uid, videoId);
+                    }
+                    router.push(`/watch/${videoId}`);
+                  }
                 }}
                 className="max-w-2xl mx-auto flex flex-col md:flex-row gap-4"
               >

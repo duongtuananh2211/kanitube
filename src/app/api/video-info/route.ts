@@ -21,8 +21,13 @@ export async function GET(request: NextRequest) {
     
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("YouTube API error response:", errorData);
-      throw new Error(`YouTube API responded with status ${response.status}`);
+      console.error("YouTube API error response:", JSON.stringify(errorData, null, 2));
+      return NextResponse.json({ 
+        error: "YouTube API Error", 
+        status: response.status,
+        details: errorData.error?.message || "Unknown error from YouTube API",
+        fullError: errorData
+      }, { status: response.status });
     }
 
     const data = await response.json();
