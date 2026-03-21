@@ -16,11 +16,16 @@ const getTokenizer = (): Promise<any> => {
 
   tokenizerPromise = new Promise((resolve, reject) => {
     // Standard kuromoji dictionaries in node_modules
-    const dictPath = path.join(process.cwd(), "node_modules", "kuromoji", "dict");
-    
+    const dictPath = path.join(
+      process.cwd(),
+      "node_modules",
+      "kuromoji",
+      "dict",
+    );
+
     console.log("[Tokenize API] Starting tokenizer build with path:", dictPath);
     const startTime = Date.now();
-    
+
     kuromoji.builder({ dicPath: dictPath }).build((err, _tokenizer) => {
       if (err) {
         console.error("[Tokenize API] Kuromoji build failed:", err);
@@ -28,7 +33,9 @@ const getTokenizer = (): Promise<any> => {
         reject(err);
         return;
       }
-      console.log(`[Tokenize API] Tokenizer built successfully in ${Date.now() - startTime}ms`);
+      console.log(
+        `[Tokenize API] Tokenizer built successfully in ${Date.now() - startTime}ms`,
+      );
       resolve(_tokenizer);
     });
   });
@@ -47,14 +54,17 @@ const getHanVietDict = () => {
 export async function POST(request: NextRequest) {
   try {
     const { text, texts } = await request.json();
-    
+
     if (!text && !texts) {
-      return NextResponse.json({ error: "No text or texts provided" }, { status: 400 });
+      return NextResponse.json(
+        { error: "No text or texts provided" },
+        { status: 400 },
+      );
     }
 
     const _tokenizer = await getTokenizer();
     const _dict = getHanVietDict();
-    
+
     // Helper to process a single string
     const processText = (input: string): WordToken[] => {
       const tokens = _tokenizer.tokenize(input);
@@ -62,7 +72,7 @@ export async function POST(request: NextRequest) {
         const surface = t.surface_form;
         const base = t.basic_form === "*" ? surface : t.basic_form;
         const lookup = _dict[surface] || _dict[base];
-        
+
         return {
           surface_form: surface,
           pos: t.pos,
@@ -76,16 +86,18 @@ export async function POST(request: NextRequest) {
 
     if (texts && Array.isArray(texts)) {
       console.log(`[Tokenize API] Batch processing ${texts.length} lines`);
-      
+
       // 1. Tokenize everything first (Fast)
-      const tokenResults = texts.map(t => processText(t));
+      const tokenResults = texts.map((t) => processText(t));
 
       // 2. Batch Translate with Gemini (AI)
       let translations: string[] = Array(texts.length).fill("");
-      
+
       if (process.env.GEMINI_API_KEY) {
         try {
-          const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+          const model = genAI.getGenerativeModel({
+            model: "gemini-3-flash-preview",
+          });
           const prompt = `
             Bạn là một dịch giả chuyên nghiệp Nhật-Việt. 
             Hãy dịch danh sách các câu tiếng Nhật sau đây sang tiếng Việt một cách tự nhiên, trôi chảy nhất.
@@ -102,11 +114,11 @@ export async function POST(request: NextRequest) {
           const result = await model.generateContent(prompt);
           const response = await result.response;
           const aiText = response.text().trim();
-          
+
           // Clean up potential markdown formatting in AI response
           const cleanJson = aiText.replace(/```json|```/g, "");
           const parsedTranslations = JSON.parse(cleanJson);
-          
+
           if (Array.isArray(parsedTranslations)) {
             translations = parsedTranslations;
           }
@@ -118,7 +130,7 @@ export async function POST(request: NextRequest) {
 
       const finalResults = tokenResults.map((tokens, idx) => ({
         tokens,
-        translation_vn: translations[idx] || ""
+        translation_vn: translations[idx] || "",
       }));
 
       return NextResponse.json({ batchResults: finalResults });

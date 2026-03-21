@@ -28,15 +28,17 @@ KaniTube is an "Immersion + Mining" web application designed for the Vietnamese 
 - **Requirement:** Real-time highlighting of the transcript based on `currentTime`.
 - **Requirement:** Temporal Jump: Clicking a word/line jumps the video to that exact timestamp.
 
-### FR-03: Instant Word Deep-Dive (USP)
+### FR-03: AI-Powered Instant Word Deep-Dive (USP)
 
 - **Description:** Multi-layered information panel triggered by clicking a Japanese word.
 - **Requirement:** Segment sentences using `kuromoji.js` with **POS (Part of Speech) tagging**.
+- **Requirement:** Use **Gemini 3.0 Flash Preview** to generate comprehensive dictionary definitions (meanings, examples, Hán-Việt) on-demand.
+- **Requirement:** Implement a **Firestore Cache Layer** (`dictionary_cache`) to store and reuse AI-generated definitions for efficiency and cost-saving.
 - **Display Data:**
   - **Hán-Việt reading** (e.g., "Liên Lạc").
   - **Word Type** (e.g., Danh từ, Động từ nhóm 1, Trợ từ).
   - **Vietnamese Meaning** (Primary definition).
-  - **Grammar Context:** A "Why this form?" section (e.g., explaining why "た" is used instead of "る").
+  - **AI-Generated Examples:** Natural sentences with Vietnamese translations and transcriptions.
 
 ### FR-04: AI-Powered Sentence Analysis
 

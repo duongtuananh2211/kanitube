@@ -85,15 +85,21 @@
 
 ## 7. AI Strategy (Gemini 3.0 Flash Preview)
 
+### 7.1 AI-Powered Dictionary & Caching
+- **Engine:** Gemini 3.0 Flash Preview for deep-dive word analysis.
+- **Workflow:**
+  1. **Query Hashing:** Generate a unique ID (SHA-256) for each lookup (e.g., `word:nihongo` or `kanji:日`).
+  2. **Cache Check:** Search Firestore `dictionary_cache/{hash}`.
+  3. **AI Generation (Cache Miss):** Request structured JSON (definitions, Hán-Việt, natural examples).
+  4. **Persistence:** Store JSON in Firestore for instant access by any future user.
+- **Benefits:** Eliminates dependency on unstable external dictionary APIs (like Mazii) and provides high-quality, contextual data.
+
+### 7.2 Contextual Grammar Analysis
 - **Usage Pattern:** **Lazy/On-Demand.** Triggered only by user interaction ("Explain Grammar" button).
 - **Global Grammar Cache:**
-  1.  **Hashing:** Sentence text is hashed (SHA-256) to create a unique ID.
-  2.  **Firestore Lookup:** Check `ai_explanations/{hash}` before calling the Gemini API.
-  3.  **Cache Shared:** If User A triggers an explanation for a sentence in Video X, User B will get it for free if they encounter the same sentence in Video Y.
-- **Prompt Engineering:**
-  - **System Prompt:** "Expert Japanese-Vietnamese Linguist. Output JSON ONLY."
-  - **Response Schema:** Detailed breakdown of grammar, particles, and Vietnamese cultural equivalents.
-- **Cost Optimization:** The AI is never called for the whole transcript, only for user-selected "confusing" fragments.
+  1. **Hashing:** Sentence text is hashed (SHA-256) to create a unique ID.
+  2. **Firestore Lookup:** Check `ai_explanations/{hash}` before calling the Gemini API.
+  3. **Cache Shared:** Explanations are cached globally across all users.
 
 ## 8. Deployment
 

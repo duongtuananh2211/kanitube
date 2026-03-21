@@ -9,12 +9,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 export async function POST(request: NextRequest) {
   try {
     const { sentence, word, context } = await request.json();
-    if (!sentence) return NextResponse.json({ error: "No sentence provided" }, { status: 400 });
+    if (!sentence)
+      return NextResponse.json(
+        { error: "No sentence provided" },
+        { status: 400 },
+      );
 
     // 1. Create a unique hash for the sentence to use as a cache key
-    const hash = crypto.createHash('sha256').update(sentence).digest('hex');
-    const cacheRef = doc(db, 'ai_explanations', hash);
-    
+    const hash = crypto.createHash("sha256").update(sentence).digest("hex");
+    const cacheRef = doc(db, "ai_explanations", hash);
+
     // 2. Check Cache
     const cachedDoc = await getDoc(cacheRef);
     if (cachedDoc.exists()) {
@@ -26,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     const prompt = `
       Bạn là một chuyên gia ngôn ngữ học Tiếng Nhật và Tiếng Việt.
-      Hãy phân tích ngữ pháp của câu tiếng Nhật sau đây, tập trung vào từ "${word || 'này'}":
+      Hãy phân tích ngữ pháp của câu tiếng Nhật sau đây, tập trung vào từ "${word || "này"}":
       
       Câu: "${sentence}"
       
@@ -48,7 +52,7 @@ export async function POST(request: NextRequest) {
     await setDoc(cacheRef, {
       sentence,
       explanation: text,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     });
 
     return NextResponse.json({ explanation: text });

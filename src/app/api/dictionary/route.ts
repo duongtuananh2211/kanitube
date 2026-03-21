@@ -1,83 +1,104 @@
 import { NextRequest, NextResponse } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { db } from "@/firebase/config";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import crypto from "crypto";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function POST(request: NextRequest) {
   try {
-    const { query, dict = "javi", type = "word" } = await request.json();
+    const { query, type = "word" } = await request.json();
 
     if (!query) {
       return NextResponse.json({ error: "No query provided" }, { status: 400 });
     }
 
-    // Use the base mazii.net domain which seems more stable for this unofficial endpoint
-    const response = await fetch("https://mazii.net/api/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      },
-      body: JSON.stringify({
-        dict,
-        type,
-        query,
-        page: 1,
-      }),
-    });
+    // 1. Check Cache First
+    const hash = crypto
+      .createHash("sha256")
+      .update(`${type}:${query}`)
+      .digest("hex");
+    const cacheRef = doc(db, "dictionary_cache", hash);
 
-    if (!response.ok) {
-      throw new Error(`Mazii API failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-    
-    // Mazii response structure: { status: 200, found: true, data: [...] }
-    if (data.status === 200 && data.data && data.data.length > 0) {
-      const result = data.data[0];
+    const cachedDoc = await getDoc(cacheRef);
+    if (cachedDoc.exists()) {
       return NextResponse.json({
         success: true,
-        data: {
-          word: result.word,
-          phonetic: result.phonetic,
-          meanings: result.means?.map((m: any) => ({
-            mean: m.mean,
-            kind: m.kind,
-            examples: m.examples?.map((e: any) => ({
-              content: e.content,
-              mean: e.mean,
-              transcription: e.transcription
-            }))
-          })) || [],
-        }
+        data: cachedDoc.data().dictionaryData,
+        cached: true,
       });
     }
 
-    // Try kanji search if word search failed (to get Hán-Việt)
-    if (type === "word" && (!data.data || data.data.length === 0)) {
-        const kanjiResponse = await fetch("https://mazii.net/api/search", {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            },
-            body: JSON.stringify({ dict: "javi", type: "kanji", query, page: 1 }),
-        });
-        const kanjiData = await kanjiResponse.json();
-        if (kanjiData.status === 200 && kanjiData.data && kanjiData.data.length > 0) {
-            const k = kanjiData.data[0];
-            return NextResponse.json({
-                success: true,
-                data: {
-                    word: k.kanji,
-                    phonetic: k.kunyomi || k.onyomi,
-                    meanings: [{ mean: k.mean, kind: "kanji" }],
-                    hanviet: k.hanviet
-                }
-            });
-        }
+    // 2. Cache Miss: Call Gemini (following tokenize API pattern)
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json(
+        { error: "Gemini API key not configured" },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ success: false, message: "No results found" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+
+    const prompt = `
+      Bạn là một từ điển Nhật-Việt chuyên nghiệp và chính xác.
+      Hãy phân tích ${type === "kanji" ? "chữ Kanji" : "từ/cụm từ"} tiếng Nhật sau: "${query}"
+      
+      Yêu cầu trả về kết quả dưới dạng JSON chính xác theo cấu trúc:
+      {
+        "word": "từ gốc/chữ kanji",
+        "phonetic": "cách đọc hiragana/katakana cho từ hoặc onyomi/kunyomi cho kanji",
+        "hanviet": "âm Hán-Việt (nếu có, không có thì để null)",
+        "meanings": [
+          {
+            "mean": "nghĩa tiếng Việt chính xác nhất",
+            "kind": "loại từ (danh từ, động từ, tính từ, kanji, v.v.)",
+            "examples": [
+              {
+                "content": "câu ví dụ tiếng Nhật",
+                "mean": "nghĩa tiếng Việt của câu ví dụ",
+                "transcription": "cách đọc câu ví dụ"
+              }
+            ]
+          }
+        ]
+      }
+      
+      Lưu ý:
+      - Trả về kết quả dưới dạng mảng JSON hoặc đối tượng JSON.
+      - KHÔNG THÊM bất kỳ lời giải thích nào khác, CHỈ TRẢ VỀ JSON.
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const aiText = response.text().trim();
+
+    // Clean up potential markdown formatting (following tokenize API pattern)
+    const cleanJson = aiText.replace(/```json|```/g, "");
+
+    let dictionaryData;
+    try {
+      dictionaryData = JSON.parse(cleanJson);
+    } catch (e) {
+      console.error("Failed to parse Gemini JSON:", aiText);
+      throw new Error("Invalid dictionary data generated");
+    }
+
+    // 3. Save to Cache
+    await setDoc(cacheRef, {
+      query,
+      type,
+      dictionaryData,
+      createdAt: Date.now(),
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: dictionaryData,
+      cached: false,
+    });
   } catch (error: any) {
-    console.error("Dictionary Proxy Error:", error);
+    console.error("AI Dictionary Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

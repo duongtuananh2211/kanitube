@@ -493,25 +493,8 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
               </h3>
             </div>
 
-            {/* Dictionary Data (Fast from Mazii) */}
+            {/* Dictionary Data (AI-Powered with Cache) */}
             <div className="space-y-3">
-              {(() => {
-                const hv =
-                  dictionaryResult?.hanviet || selectedWord.token.han_viet;
-                // Only show if it's a valid string and not just a number
-                if (hv && typeof hv === "string" && isNaN(Number(hv))) {
-                  return (
-                    <div className="bg-[#E5F7FF] border-2 border-[#1CB0F6] rounded-2xl p-3">
-                      <p className="text-[10px] font-bold text-[#1CB0F6] uppercase tracking-wider">
-                        Hán-Việt Reading
-                      </p>
-                      <p className="text-xl font-black text-[#1CB0F6]">{hv}</p>
-                    </div>
-                  );
-                }
-                return null;
-              })()}
-
               {isFetchingDictionary ? (
                 <div className="flex items-center gap-2 py-2 animate-pulse">
                   <div className="w-2 h-2 bg-[#AFAFAF] rounded-full animate-bounce" />
