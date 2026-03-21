@@ -32,7 +32,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
 }) => {
   const { user } = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const activeLineRef = useRef<HTMLSpanElement>(null);
+  const activeLineRef = useRef<HTMLDivElement>(null);
   const [selectedWord, setSelectedWord] = useState<{
     token: WordToken;
     rect: DOMRect;

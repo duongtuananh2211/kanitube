@@ -33,7 +33,7 @@ export class YouTubeService {
     return null;
   }
 
-  private static async saveToCache(videoId: string, data: TranscriptData) {
+  static async saveToCache(videoId: string, data: TranscriptData) {
     try {
       const docRef = doc(db, 'transcripts', videoId);
       await setDoc(docRef, data);
