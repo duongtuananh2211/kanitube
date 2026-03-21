@@ -1,0 +1,13 @@
+{
+  "学生": { "hv": "HỌC SINH", "mean": "Học sinh, sinh viên" },
+  "先生": { "hv": "TIÊN SINH", "mean": "Thầy giáo, cô giáo" },
+  "日本": { "hv": "NHẬT BẢN", "mean": "Nước Nhật" },
+  "勉強": { "hv": "MIỄN CƯỠNG", "mean": "Học tập" },
+  "連絡": { "hv": "LIÊN LẠC", "mean": "Liên lạc" },
+  "経済": { "hv": "KINH TẾ", "mean": "Kinh tế" },
+  "会合": { "hv": "HỘI HỢP", "mean": "Cuộc họp" },
+  "学校": { "hv": "HỌC HIỆU", "mean": "Trường học" },
+  "私": { "hv": "TƯ", "mean": "Tôi" },
+  "行": { "hv": "HÀNH", "mean": "Đi" },
+  "見": { "hv": "KIẾN", "mean": "Nhìn, xem" }
+}
