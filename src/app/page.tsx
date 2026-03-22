@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Header } from "@/components/Header";
 import { useAuth } from "@/firebase/auth";
 import { Sparkles, Brain, BookOpen, Layers, Play, Clock, Youtube } from "lucide-react";
-import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
-import { db } from "@/firebase/config";
 import { UserVideo } from "@/types";
 import Link from 'next/link';
 import { YouTubeService } from "@/services/youtube";
@@ -18,30 +16,29 @@ export default function Home() {
   const [videosLoading, setVideosLoading] = useState(true);
 
   useEffect(() => {
-    if (authLoading) return;
+    async function fetchVideos() {
+      if (authLoading) return;
 
-    if (!user) {
-      setRecentVideos([]);
-      setVideosLoading(false);
-      return;
+      if (!user) {
+        setRecentVideos([]);
+        setVideosLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/user-videos?userId=${user.uid}`);
+        if (response.ok) {
+          const data = await response.json();
+          setRecentVideos(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch videos from Supabase:", error);
+      } finally {
+        setVideosLoading(false);
+      }
     }
 
-    const videosRef = collection(db, 'users', user.uid, 'videos');
-    const q = query(videosRef, orderBy('addedAt', 'desc'), limit(10));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const videos = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as UserVideo[];
-      setRecentVideos(videos);
-      setVideosLoading(false);
-    }, (error) => {
-      console.error("Firestore error:", error);
-      setVideosLoading(false);
-    });
-
-    return () => unsubscribe();
+    fetchVideos();
   }, [user, authLoading]);
 
   if (authLoading) {
@@ -62,8 +59,6 @@ export default function Home() {
       <div className="flex-1 max-w-7xl mx-auto px-4 md:px-8 py-12 w-full">
         {!user ? (
           <>
-            {/* ... rest of code same ... */}
-
             <section className="text-center space-y-8 mb-16 py-12">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F7F7] border-2 border-[#E5E5E5] rounded-full text-sm font-bold text-[#AFAFAF] uppercase tracking-wider">
                 <Sparkles className="w-4 h-4 text-[#FFB800]" />
@@ -108,7 +103,6 @@ export default function Home() {
           </>
         ) : (
           <>
-            {/* New Lesson Hero for Mobile/Quick Start */}
             <section className="mb-12 bg-[#E5FFD1] border-4 border-[#58CC02] rounded-[2rem] p-6 md:p-10 text-center shadow-[0_8px_0_0_#46A302]">
               <h2 className="text-2xl md:text-3xl font-extrabold text-[#4B4B4B] mb-4">
                 Ready for your next immersion?

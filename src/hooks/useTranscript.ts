@@ -71,8 +71,12 @@ export const useTranscript = (videoId: string | null) => {
             isFullySegmented: true 
           };
 
-          // Background: Update Firestore cache with tokenized data
-          YouTubeService.saveToCache(data.videoId, updatedData);
+          // Background: Update Supabase cache with tokenized data
+          fetch('/api/transcript/save', {
+            method: 'POST',
+            body: JSON.stringify({ videoId: data.videoId, transcript: updatedData }),
+            headers: { 'Content-Type': 'application/json' }
+          }).catch(err => console.error("Failed to save transcript cache:", err));
           
           return updatedData;
         });

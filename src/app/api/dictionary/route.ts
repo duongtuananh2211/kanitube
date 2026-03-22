@@ -48,11 +48,21 @@ export async function POST(request: NextRequest) {
       {
         "word": "từ gốc/chữ kanji",
         "phonetic": "cách đọc hiragana/katakana cho từ hoặc onyomi/kunyomi cho kanji",
+        "pos": "loại từ (danh từ, động từ, tính từ, kanji, v.v.). Nếu có nhiều loại, liệt kê cách nhau bằng dấu phẩy",
         "hanviet": "âm Hán-Việt (nếu có, không có thì để null)",
+        "kanji_breakdown": [
+          {
+            "kanji": "chữ kanji đơn lẻ",
+            "hanviet": "âm Hán-Việt của chữ đó",
+            "meaning": "nghĩa của chữ đó",
+            "onyomi": "âm On của chữ đó",
+            "kunyomi": "âm Kun của chữ đó"
+          }
+        ],
         "meanings": [
           {
             "mean": "nghĩa tiếng Việt chính xác nhất",
-            "kind": "loại từ (danh từ, động từ, tính từ, kanji, v.v.)",
+            "kind": "loại từ cụ thể cho nghĩa này",
             "examples": [
               {
                 "content": "câu ví dụ tiếng Nhật",
@@ -65,6 +75,7 @@ export async function POST(request: NextRequest) {
       }
       
       Lưu ý:
+      - kanji_breakdown: Nếu từ có nhiều chữ Kanji, hãy liệt kê từng chữ. Nếu là 1 chữ Kanji, liệt kê chính nó. Nếu từ không có Kanji, trả về mảng rỗng [].
       - Trả về kết quả dưới dạng mảng JSON hoặc đối tượng JSON.
       - KHÔNG THÊM bất kỳ lời giải thích nào khác, CHỈ TRẢ VỀ JSON.
     `;

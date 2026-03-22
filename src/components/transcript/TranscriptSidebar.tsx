@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { TranscriptData, TranscriptLine, WordToken, SRSCard } from "@/types";
+import { TranscriptData, TranscriptLine, WordToken, SRSCard, DictionaryData, DictionaryMeaning } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Plus, HelpCircle, X, Sparkles, Check, Bookmark } from "lucide-react";
@@ -54,7 +54,9 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
 
   // Dictionary State
   const [isFetchingDictionary, setIsFetchingDictionary] = useState(false);
-  const [dictionaryResult, setDictionaryResult] = useState<any>(null);
+  const [dictionaryResult, setDictionaryResult] = useState<DictionaryData | null>(
+    null,
+  );
 
   // Mining State
   const [isMining, setIsMining] = useState(false);
@@ -197,7 +199,9 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
       if (snapshot.empty) {
         // Use dictionaryResult if available, fallback to token data
         const meaning = dictionaryResult
-          ? dictionaryResult.meanings.map((m: any) => m.mean).join("; ")
+          ? dictionaryResult.meanings
+              .map((m: DictionaryMeaning) => m.mean)
+              .join("; ")
           : selectedWord.token.definition_vn || "";
 
         const hanViet =
@@ -485,12 +489,24 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
 
           <div className="space-y-4">
             <div>
-              <p className="text-xs font-bold text-[#AFAFAF] uppercase tracking-widest">
-                {selectedWord.token.reading}
-              </p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-xs font-bold text-[#AFAFAF] uppercase tracking-widest">
+                  {dictionaryResult?.phonetic || selectedWord.token.reading}
+                </p>
+                {(dictionaryResult?.hanviet || selectedWord.token.han_viet) && (
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 bg-[#1CB0F6]/10 text-[#1CB0F6] rounded uppercase">
+                    {dictionaryResult?.hanviet || selectedWord.token.han_viet}
+                  </span>
+                )}
+              </div>
               <h3 className="text-3xl font-extrabold text-[#111111]">
                 {selectedWord.token.surface_form}
               </h3>
+              {(dictionaryResult?.pos || selectedWord.token.pos) && (
+                <p className="text-[10px] font-bold text-[#AFAFAF] uppercase mt-1">
+                  {dictionaryResult?.pos || selectedWord.token.pos}
+                </p>
+              )}
             </div>
 
             {/* Dictionary Data (AI-Powered with Cache) */}
@@ -502,46 +518,96 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
                   <div className="w-2 h-2 bg-[#AFAFAF] rounded-full animate-bounce [animation-delay:-0.3s]" />
                 </div>
               ) : dictionaryResult ? (
-                <div className="space-y-3">
-                  <span className="text-[10px] font-bold px-2 py-0.5 bg-[#F7F7F7] border border-[#E5E5E5] rounded-md text-[#AFAFAF] uppercase">
-                    {selectedWord.token.pos}
-                  </span>
-                  <div className="space-y-2 max-h-40 mt-3 overflow-y-auto custom-scrollbar pr-1">
-                    {dictionaryResult.meanings.map((m: any, idx: number) => (
-                      <div
-                        key={idx}
-                        className="border-l-4 border-[#58CC02] pl-3 py-1"
-                      >
-                        <p className="text-sm font-bold text-[#111111] leading-snug">
-                          {m.mean}
-                        </p>
-                        {m.examples?.[0] && (
-                          <div className="mt-3 text-[11px] text-[#777777]">
-                            <p className="font-medium">
-                              • {m.examples[0].content}
+                <div className="space-y-4">
+                  {/* Meanings */}
+                  <div className="space-y-2 max-h-40 overflow-y-auto custom-scrollbar pr-1">
+                    {dictionaryResult.meanings.map(
+                      (m: DictionaryMeaning, idx: number) => (
+                        <div
+                          key={idx}
+                          className="border-l-4 border-[#58CC02] pl-3 py-1"
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-sm font-bold text-[#111111] leading-snug">
+                              {m.mean}
                             </p>
-                            {m.examples[0].transcription && (
-                              <p className="italic opacity-80 pl-2">
-                                {m.examples[0].transcription}
-                              </p>
+                            {m.kind && (
+                              <span className="text-[9px] px-1.5 py-0.5 bg-[#F7F7F7] text-[#AFAFAF] rounded border border-[#E5E5E5]">
+                                {m.kind}
+                              </span>
                             )}
-                            <p className="text-[#AFAFAF] italic pl-2">
-                              {m.examples[0].mean}
-                            </p>
                           </div>
-                        )}
-                      </div>
-                    ))}
+                          {m.examples?.[0] && (
+                            <div className="mt-2 text-[11px] text-[#777777] bg-[#F7F7F7] p-2 rounded-lg">
+                              <p className="font-medium text-[#111111]">
+                                {m.examples[0].content}
+                              </p>
+                              {m.examples[0].transcription && (
+                                <p className="italic opacity-80 mt-0.5">
+                                  {m.examples[0].transcription}
+                                </p>
+                              )}
+                              <p className="text-[#58CC02] font-bold mt-1">
+                                {m.examples[0].mean}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ),
+                    )}
                   </div>
+
+                  {/* Kanji Breakdown */}
+                  {dictionaryResult.kanji_breakdown &&
+                    dictionaryResult.kanji_breakdown.length > 0 && (
+                      <div className="pt-3 border-t border-[#E5E5E5]">
+                        <p className="text-[10px] font-bold text-[#AFAFAF] uppercase tracking-widest mb-2">
+                          Chiết tự Kanji
+                        </p>
+                        <div className="grid grid-cols-1 gap-2">
+                          {dictionaryResult.kanji_breakdown.map((kj, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-start gap-3 bg-[#F7F7F7] p-2 rounded-xl border border-[#E5E5E5]/50"
+                            >
+                              <div className="text-2xl font-bold text-[#111111] bg-white w-10 h-10 flex items-center justify-center rounded-lg shadow-sm border border-[#E5E5E5]">
+                                {kj.kanji}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-bold text-[#1CB0F6]">
+                                    {kj.hanviet}
+                                  </span>
+                                  <span className="text-[10px] text-[#AFAFAF] font-medium truncate">
+                                    {kj.meaning}
+                                  </span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                  {kj.onyomi && (
+                                    <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                      <span className="font-bold opacity-50">On:</span>
+                                      {kj.onyomi}
+                                    </span>
+                                  )}
+                                  {kj.kunyomi && (
+                                    <span className="text-[9px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                      <span className="font-bold opacity-50">Kun:</span>
+                                      {kj.kunyomi}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                 </div>
               ) : (
                 <div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 bg-[#F7F7F7] border border-[#E5E5E5] rounded-md text-[#AFAFAF] uppercase">
-                    {selectedWord.token.pos}
-                  </span>
                   <p className="mt-2 text-[#4B4B4B] font-medium leading-relaxed">
                     {selectedWord.token.definition_vn ||
-                      "Cơ sở dữ liệu chưa có định nghĩa cụ thể. Hãy bấm 'Explain' để phân tích chi tiết."}
+                      "Cơ sở dữ liệu chưa có định nghĩa cụ thể."}
                   </p>
                 </div>
               )}

@@ -1,0 +1,876 @@
+[
+  {
+    "query": "ああ",
+    "type": "word",
+    "dictionaryData": {
+      "word": "ああ",
+      "phonetic": "ああ",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "A, Ôi, Chà (Thán từ biểu lộ cảm xúc)",
+          "kind": "interjection",
+          "examples": [
+            {
+              "content": "ああ、そうですか。",
+              "mean": "À, vậy à.",
+              "transcription": "Aa, sou desu ka."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "会う",
+    "type": "word",
+    "dictionaryData": {
+      "word": "会う",
+      "phonetic": "あう",
+      "hanviet": "HỘI",
+      "meanings": [
+        {
+          "mean": "Gặp, hội ngộ",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "駅で友達に会います。",
+              "mean": "Tôi sẽ gặp bạn ở nhà ga.",
+              "transcription": "Eki de tomodachi ni aimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "青い",
+    "type": "word",
+    "dictionaryData": {
+      "word": "青い",
+      "phonetic": "あおい",
+      "hanviet": "THANH",
+      "meanings": [
+        {
+          "mean": "Xanh, màu xanh da trời, xanh lá cây",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "空がとても青いです。",
+              "mean": "Bầu trời rất xanh.",
+              "transcription": "Sora ga totemo aoi desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "赤い",
+    "type": "word",
+    "dictionaryData": {
+      "word": "赤い",
+      "phonetic": "あかい",
+      "hanviet": "XÍCH",
+      "meanings": [
+        {
+          "mean": "Đỏ, màu đỏ",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "赤いリンゴを食べます。",
+              "mean": "Tôi ăn quả táo màu đỏ.",
+              "transcription": "Akai ringo wo tabemasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "明るい",
+    "type": "word",
+    "dictionaryData": {
+      "word": "明るい",
+      "phonetic": "あかるい",
+      "hanviet": "MINH",
+      "meanings": [
+        {
+          "mean": "Sáng, tươi sáng, vui vẻ",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "この部屋は明るいです。",
+              "mean": "Căn phòng này sáng sủa.",
+              "transcription": "Kono heya wa akarui desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "秋",
+    "type": "word",
+    "dictionaryData": {
+      "word": "秋",
+      "phonetic": "あき",
+      "hanviet": "THU",
+      "meanings": [
+        {
+          "mean": "Mùa thu",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "秋は涼しいです。",
+              "mean": "Mùa thu thì mát mẻ.",
+              "transcription": "Aki wa suzushii desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "開く",
+    "type": "word",
+    "dictionaryData": {
+      "word": "開く",
+      "phonetic": "あく",
+      "hanviet": "KHAI",
+      "meanings": [
+        {
+          "mean": "Mở, tự mở",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "ドアが開いています。",
+              "mean": "Cửa đang mở.",
+              "transcription": "Doa ga aite imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "開ける",
+    "type": "word",
+    "dictionaryData": {
+      "word": "開ける",
+      "phonetic": "あける",
+      "hanviet": "KHAI",
+      "meanings": [
+        {
+          "mean": "Mở (cái gì đó)",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "窓を開けてください。",
+              "mean": "Làm ơn hãy mở cửa sổ.",
+              "transcription": "Mado wo akete kudasai."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あげる",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あげる",
+      "phonetic": "あげる",
+      "hanviet": "THƯỢNG",
+      "meanings": [
+        {
+          "mean": "Cho, tặng",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "プレゼントをあげます。",
+              "mean": "Tôi tặng quà.",
+              "transcription": "Purezento wo agemasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "朝",
+    "type": "word",
+    "dictionaryData": {
+      "word": "朝",
+      "phonetic": "あさ",
+      "hanviet": "TRIỀU",
+      "meanings": [
+        {
+          "mean": "Buổi sáng",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "朝６時に起きます。",
+              "mean": "Tôi thức dậy vào lúc 6 giờ sáng.",
+              "transcription": "Asa rokuji ni okimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "朝ご飯",
+    "type": "word",
+    "dictionaryData": {
+      "word": "朝ご飯",
+      "phonetic": "あさごはん",
+      "hanviet": "TRIỀU PHẠN",
+      "meanings": [
+        {
+          "mean": "Bữa sáng",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "朝ご飯を食べましたか。",
+              "mean": "Bạn đã ăn sáng chưa?",
+              "transcription": "Asagohan wo tabemashita ka."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あさって",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あさって",
+      "phonetic": "あさって",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "Ngày mốt, ngày kia",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "あさってテストがあります。",
+              "mean": "Ngày mốt có bài kiểm tra.",
+              "transcription": "Asatte tesuto ga arimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "足",
+    "type": "word",
+    "dictionaryData": {
+      "word": "足",
+      "phonetic": "あし",
+      "hanviet": "TÚC",
+      "meanings": [
+        {
+          "mean": "Chân, bàn chân",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "足が痛いです。",
+              "mean": "Tôi bị đau chân.",
+              "transcription": "Ashi ga itai desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "明日",
+    "type": "word",
+    "dictionaryData": {
+      "word": "明日",
+      "phonetic": "あした",
+      "hanviet": "MINH NHẬT",
+      "meanings": [
+        {
+          "mean": "Ngày mai",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "明日会いましょう。",
+              "mean": "Ngày mai gặp nhau nhé.",
+              "transcription": "Ashita aimashou."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あそこ",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あそこ",
+      "phonetic": "あそこ",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "Đằng kia (vị trí xa cả người nói và người nghe)",
+          "kind": "pronoun",
+          "examples": [
+            {
+              "content": "あそこに猫がいます。",
+              "mean": "Có con mèo ở đằng kia.",
+              "transcription": "Asoko ni neko ga imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "遊ぶ",
+    "type": "word",
+    "dictionaryData": {
+      "word": "遊ぶ",
+      "phonetic": "あそぶ",
+      "hanviet": "DU",
+      "meanings": [
+        {
+          "mean": "Chơi, vui chơi",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "子供たちが庭で遊んでいます。",
+              "mean": "Lũ trẻ đang chơi trong vườn.",
+              "transcription": "Kodomotachi ga niwa de asonde imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "温かい",
+    "type": "word",
+    "dictionaryData": {
+      "word": "温かい",
+      "phonetic": "あたたかい",
+      "hanviet": "ÔN",
+      "meanings": [
+        {
+          "mean": "Ấm áp (cảm giác về nhiệt độ, đồ vật)",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "温かいお茶を飲みます。",
+              "mean": "Tôi uống trà ấm.",
+              "transcription": "Atatakai ocha wo nomimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "頭",
+    "type": "word",
+    "dictionaryData": {
+      "word": "頭",
+      "phonetic": "あたま",
+      "hanviet": "ĐẦU",
+      "meanings": [
+        {
+          "mean": "Đầu, đầu óc",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "頭が痛いです。",
+              "mean": "Tôi bị đau đầu.",
+              "transcription": "Atama ga itai desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "新しい",
+    "type": "word",
+    "dictionaryData": {
+      "word": "新しい",
+      "phonetic": "あたらしい",
+      "hanviet": "TÂN",
+      "meanings": [
+        {
+          "mean": "Mới",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "新しい靴を買いました。",
+              "mean": "Tôi đã mua đôi giày mới.",
+              "transcription": "Atarashii kutsu wo kaimashita."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あちら",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あちら",
+      "phonetic": "あちら",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "Hướng kia, phía kia (lịch sự)",
+          "kind": "pronoun",
+          "examples": [
+            {
+              "content": "あちらが受付です。",
+              "mean": "Phía kia là quầy tiếp tân.",
+              "transcription": "Achira ga uketsuke desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "暑い",
+    "type": "word",
+    "dictionaryData": {
+      "word": "暑い",
+      "phonetic": "あつい",
+      "hanviet": "THỬ",
+      "meanings": [
+        {
+          "mean": "Nóng (thời tiết)",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "今日はとても暑いですね。",
+              "mean": "Hôm nay trời rất nóng nhỉ.",
+              "transcription": "Kyou wa totemo atsui desu ne."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "厚い",
+    "type": "word",
+    "dictionaryData": {
+      "word": "厚い",
+      "phonetic": "あつい",
+      "hanviet": "HẬU",
+      "meanings": [
+        {
+          "mean": "Dày",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "これは厚い本です。",
+              "mean": "Đây là một cuốn sách dày.",
+              "transcription": "Kore wa atsui hon desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "後",
+    "type": "word",
+    "dictionaryData": {
+      "word": "後",
+      "phonetic": "あと",
+      "hanviet": "HẬU",
+      "meanings": [
+        {
+          "mean": "Sau, phía sau, sau khi",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "仕事の後で映画を見ます。",
+              "mean": "Sau khi làm việc xong tôi sẽ xem phim.",
+              "transcription": "Shigoto no ato de eiga wo mimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "貴方",
+    "type": "word",
+    "dictionaryData": {
+      "word": "貴方",
+      "phonetic": "あなた",
+      "hanviet": "QUÝ PHƯƠNG",
+      "meanings": [
+        {
+          "mean": "Bạn, anh, chị",
+          "kind": "pronoun",
+          "examples": [
+            {
+              "content": "貴方は学生ですか。",
+              "mean": "Bạn có phải là sinh viên không?",
+              "transcription": "Anata wa gakusei desu ka."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "兄",
+    "type": "word",
+    "dictionaryData": {
+      "word": "兄",
+      "phonetic": "あに",
+      "hanviet": "HUYNH",
+      "meanings": [
+        {
+          "mean": "Anh trai (của mình)",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "私の兄は東京に住んでいます。",
+              "mean": "Anh trai tôi đang sống ở Tokyo.",
+              "transcription": "Watashi no ani wa Toukyou ni sunde imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "姉",
+    "type": "word",
+    "dictionaryData": {
+      "word": "姉",
+      "phonetic": "あね",
+      "hanviet": "TỶ",
+      "meanings": [
+        {
+          "mean": "Chị gái (của mình)",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "姉は結婚しています。",
+              "mean": "Chị gái tôi đã kết hôn.",
+              "transcription": "Ane wa kekkon shite imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あの",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あの",
+      "phonetic": "あの",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "Cái đó, người đó (xa cả hai người)",
+          "kind": "adnominal",
+          "examples": [
+            {
+              "content": "あの人は誰ですか。",
+              "mean": "Người kia là ai vậy?",
+              "transcription": "Ano hito wa dare desu ka."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "アパート",
+    "type": "word",
+    "dictionaryData": {
+      "word": "アパート",
+      "phonetic": "あぱあと",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "Căn hộ, chung cư",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "私はアパートに住んでいます。",
+              "mean": "Tôi đang sống ở một căn hộ.",
+              "transcription": "Watashi wa apaato ni sunde imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "浴びる",
+    "type": "word",
+    "dictionaryData": {
+      "word": "浴びる",
+      "phonetic": "あびる",
+      "hanviet": "DỤC",
+      "meanings": [
+        {
+          "mean": "Tắm, dội (nước)",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "毎朝シャワーを浴びます。",
+              "mean": "Sáng nào tôi cũng tắm vòi sen.",
+              "transcription": "Maiasa shawaa wo abiru."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "危ない",
+    "type": "word",
+    "dictionaryData": {
+      "word": "危ない",
+      "phonetic": "あぶない",
+      "hanviet": "NGUY",
+      "meanings": [
+        {
+          "mean": "Nguy hiểm",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "そこは危ないから気をつけて。",
+              "mean": "Chỗ đó nguy hiểm nên hãy cẩn thận nhé.",
+              "transcription": "Soko wa abunai kara ki wo tsukete."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "甘い",
+    "type": "word",
+    "dictionaryData": {
+      "word": "甘い",
+      "phonetic": "あまい",
+      "hanviet": "CAM",
+      "meanings": [
+        {
+          "mean": "Ngọt",
+          "kind": "adjective",
+          "examples": [
+            {
+              "content": "このケーキは甘いです。",
+              "mean": "Cái bánh này ngọt quá.",
+              "transcription": "Kono keeki wa amai desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あまり",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あまり",
+      "phonetic": "あまり",
+      "hanviet": "DƯ",
+      "meanings": [
+        {
+          "mean": "Không... lắm (dùng với phủ định)",
+          "kind": "adverb",
+          "examples": [
+            {
+              "content": "あまりお酒を飲みません。",
+              "mean": "Tôi không uống rượu nhiều lắm.",
+              "transcription": "Amari osake wo nomimasen."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "雨",
+    "type": "word",
+    "dictionaryData": {
+      "word": "雨",
+      "phonetic": "あめ",
+      "hanviet": "VŨ",
+      "meanings": [
+        {
+          "mean": "Mưa",
+          "kind": "noun",
+          "examples": [
+            {
+              "content": "雨が降っています。",
+              "mean": "Trời đang mưa.",
+              "transcription": "Ame ga futte imasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "洗う",
+    "type": "word",
+    "dictionaryData": {
+      "word": "洗う",
+      "phonetic": "あらう",
+      "hanviet": "TẨY",
+      "meanings": [
+        {
+          "mean": "Rửa, giặt",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "手をきれいに洗います。",
+              "mean": "Rửa tay thật sạch.",
+              "transcription": "Te wo kirei ni araimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "有る",
+    "type": "word",
+    "dictionaryData": {
+      "word": "有る",
+      "phonetic": "ある",
+      "hanviet": "HỮU",
+      "meanings": [
+        {
+          "mean": "Có (dùng cho vật vô tri vô giác)",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "机の上に本が有ります。",
+              "mean": "Có quyển sách ở trên bàn.",
+              "transcription": "Tsukue no ue ni hon ga arimasu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "ある",
+    "type": "word",
+    "dictionaryData": {
+      "word": "ある",
+      "phonetic": "ある",
+      "hanviet": "HỮU",
+      "meanings": [
+        {
+          "mean": "Có (vật vô tri vô giác - thường dùng Hiragana)",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "そこに辞書がありますか。",
+              "mean": "Ở đó có quyển từ điển không?",
+              "transcription": "Soko ni jisho ga arimasu ka."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "歩く",
+    "type": "word",
+    "dictionaryData": {
+      "word": "歩く",
+      "phonetic": "あるく",
+      "hanviet": "BỘ",
+      "meanings": [
+        {
+          "mean": "Đi bộ",
+          "kind": "verb",
+          "examples": [
+            {
+              "content": "駅まで歩きましょう。",
+              "mean": "Chúng ta cùng đi bộ đến nhà ga nhé.",
+              "transcription": "Eki made arukimashou."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  },
+  {
+    "query": "あれ",
+    "type": "word",
+    "dictionaryData": {
+      "word": "あれ",
+      "phonetic": "あれ",
+      "hanviet": null,
+      "meanings": [
+        {
+          "mean": "Cái kia (xa cả người nói và người nghe)",
+          "kind": "pronoun",
+          "examples": [
+            {
+              "content": "あれは私の車です。",
+              "mean": "Cái kia là xe hơi của tôi.",
+              "transcription": "Are wa watashi no kuruma desu."
+            }
+          ]
+        }
+      ]
+    },
+    "createdAt": 1711000000000
+  }
+]

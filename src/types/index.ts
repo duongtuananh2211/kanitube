@@ -66,3 +66,39 @@ export interface SRSCard {
   easeFactor: number;
   repetitions: number;
 }
+
+export interface DictionaryExample {
+  content: string;
+  mean: string;
+  transcription: string;
+}
+
+export interface DictionaryMeaning {
+  mean: string;
+  kind: string;
+  examples: DictionaryExample[];
+}
+
+export interface KanjiBreakdown {
+  kanji: string;
+  hanviet: string;
+  meaning: string;
+  onyomi: string;
+  kunyomi: string;
+}
+
+export interface DictionaryData {
+  word: string;
+  phonetic: string;
+  pos: string;
+  hanviet: string | null;
+  kanji_breakdown?: KanjiBreakdown[];
+  meanings: DictionaryMeaning[];
+}
+
+export interface DictionaryCache {
+  query: string;
+  type: "word" | "kanji";
+  dictionaryData: DictionaryData;
+  createdAt: number;
+}

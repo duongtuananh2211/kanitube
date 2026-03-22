@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { YoutubeTranscript } from "youtube-transcript";
 import { TranscriptData, TranscriptLine } from "@/types";
+import { db } from "@/db";
+import { videos } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { fetchVideoTitle } from "@/lib/youtube-utils";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,8 +15,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 1. Fetch transcript from YouTube
-    // We try to find Japanese transcripts first
+    // 1. Check Cache (Supabase)
+    const cached = await db.select().from(videos).where(eq(videos.id, videoId)).limit(1);
+    
+    // Only return cache if it's NOT a skeleton (has lines)
+    if (cached.length > 0) {
+      const data = cached[0].transcript as TranscriptData;
+      if (data && data.lines && data.lines.length > 0) {
+        console.log(`[API transcript] Serving from cache: ${videoId}`);
+        return NextResponse.json(data);
+      }
+    }
+
+    console.log(`[API transcript] Cache miss or skeleton. Fetching from YouTube: ${videoId}`);
+
+    // 2. Fetch transcript from YouTube
     const transcript = await YoutubeTranscript.fetchTranscript(videoId, {
       lang: 'ja'
     });
@@ -21,18 +38,33 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No Japanese transcript found" }, { status: 404 });
     }
 
-    // 2. Format to TranscriptData
+    // 3. Format to TranscriptData
     const formattedLines: TranscriptLine[] = transcript.map(item => ({
       text: item.text,
-      start: item.offset / 1000, // Convert to seconds
+      start: item.offset / 1000, 
       duration: item.duration / 1000,
     }));
 
     const transcriptData: TranscriptData = {
       videoId,
       lines: formattedLines,
-      isFullySegmented: false, // We'll segment this in Phase 3
+      isFullySegmented: false,
     };
+
+    // 4. Save to Cache (Update the skeleton with real data)
+    const videoTitle = await fetchVideoTitle(videoId);
+    await db.insert(videos).values({
+      id: videoId,
+      transcript: transcriptData,
+      isFullySegmented: false,
+      title: videoTitle, 
+    }).onConflictDoUpdate({
+      target: videos.id,
+      set: { 
+        transcript: transcriptData,
+        title: videoTitle
+      }
+    });
 
     return NextResponse.json(transcriptData);
   } catch (error: any) {
