@@ -20,7 +20,7 @@ interface TranscriptSidebarProps {
   currentLineIndex: number;
   loading: boolean;
   error: string | null;
-  onLineClick: (time: number) => void;
+  onLineClick: (startTime: number, endTime: number) => void;
 }
 
 export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
@@ -98,6 +98,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
     sentence: string,
     lineIdx: number,
     lineStart: number,
+    duration: number,
   ) => {
     e.stopPropagation();
     const isActuallySelected =
@@ -112,7 +113,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
       fetchDictionaryData(token.surface_form);
     } else {
       setSelectedLineIndex(lineIdx);
-      onLineClick(lineStart);
+      onLineClick(lineStart, lineStart + duration);
     }
   };
 
@@ -135,7 +136,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
       handleExplainSentence(line.text);
     } else {
       setSelectedLineIndex(lineIdx);
-      onLineClick(line.start);
+      onLineClick(line.start, line.start + line.duration);
     }
   };
 
@@ -291,7 +292,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedLineIndex(lIdx);
-                  onLineClick(line.start);
+                  onLineClick(line.start, line.start + line.duration);
                 }}
               >
                 <div className="flex flex-wrap items-end gap-x-2 gap-y-6 md:gap-y-10">
@@ -317,6 +318,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
                               line.text,
                               lIdx,
                               line.start,
+                              line.duration,
                             )
                           }
                           className={cn(

@@ -6,6 +6,8 @@ interface YouTubePlayerProps {
   videoId: string;
   onTimeUpdate?: (currentTime: number) => void;
   onReady?: (player: any) => void;
+  stopTime?: number | null;
+  onStopReached?: () => void;
 }
 
 declare global {
@@ -18,11 +20,18 @@ declare global {
 export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ 
   videoId, 
   onTimeUpdate,
-  onReady 
+  onReady,
+  stopTime,
+  onStopReached
 }) => {
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const stopTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    stopTimeRef.current = stopTime ?? null;
+  }, [stopTime]);
 
   useEffect(() => {
     // Load YouTube IFrame API
@@ -71,7 +80,14 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       stopTracking();
       intervalRef.current = setInterval(() => {
         if (playerRef.current && playerRef.current.getCurrentTime) {
-          onTimeUpdate?.(playerRef.current.getCurrentTime());
+          const currentTime = playerRef.current.getCurrentTime();
+          onTimeUpdate?.(currentTime);
+
+          if (stopTimeRef.current !== null && currentTime >= stopTimeRef.current) {
+            playerRef.current.pauseVideo();
+            stopTimeRef.current = null;
+            onStopReached?.();
+          }
         }
       }, 100);
     }

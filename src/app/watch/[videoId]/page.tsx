@@ -11,6 +11,7 @@ export default function WatchPage() {
   const params = useParams();
   const videoId = params.videoId as string;
   const playerRef = useRef<any>(null);
+  const [stopTime, setStopTime] = React.useState<number | null>(null);
 
   const {
     transcript,
@@ -24,9 +25,11 @@ export default function WatchPage() {
     updateCurrentTime(time);
   };
 
-  const handleLineClick = (time: number) => {
+  const handleLineClick = (startTime: number, endTime: number) => {
     if (playerRef.current) {
-      playerRef.current.seekTo(time);
+      // Stop 0.1 seconds before the next sentence to avoid "bleeding" into the next line
+      setStopTime(Math.max(startTime, endTime - 0.1));
+      playerRef.current.seekTo(startTime);
       playerRef.current.playVideo();
     }
   };
@@ -47,6 +50,8 @@ export default function WatchPage() {
               videoId={videoId}
               onTimeUpdate={handleTimeUpdate}
               onReady={handlePlayerReady}
+              stopTime={stopTime}
+              onStopReached={() => setStopTime(null)}
             />
             </div>
           {/* Right Column: Transcript */}
