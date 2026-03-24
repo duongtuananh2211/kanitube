@@ -4,8 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { TranscriptData, TranscriptLine, WordToken, SRSCard, DictionaryData, DictionaryMeaning } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Plus, HelpCircle, X, Sparkles, Check, Bookmark } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import { Plus, HelpCircle, X, Check, Bookmark } from "lucide-react";
 import { db } from "@/firebase/config";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { useAuth } from "@/firebase/auth";
@@ -38,19 +37,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
     rect: DOMRect;
     sentence: string;
   } | null>(null);
-  const [selectedSentenceForAI, setSelectedSentenceForAI] = useState<{
-    text: string;
-    translation: string;
-  } | null>(null);
   const [selectedLineIndex, setSelectedLineIndex] = useState<number>(-1);
-
-  // AI Analysis State
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [explanation, setExplanation] = useState<string | null>(null);
-  const [sentenceExplanation, setSentenceExplanation] = useState<string | null>(
-    null,
-  );
-  const [isAnalyzingSentence, setIsAnalyzingSentence] = useState(false);
 
   // Dictionary State
   const [isFetchingDictionary, setIsFetchingDictionary] = useState(false);
@@ -108,79 +95,11 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
     if (isActuallySelected) {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       setSelectedWord({ token, rect, sentence });
-      setExplanation(null);
       setMinedSuccess(false);
       fetchDictionaryData(token.surface_form);
     } else {
       setSelectedLineIndex(lineIdx);
       onLineClick(lineStart, lineStart + duration);
-    }
-  };
-
-  const handleSentenceClick = (
-    e: React.MouseEvent,
-    line: TranscriptLine,
-    lineIdx: number,
-  ) => {
-    e.stopPropagation();
-    const isActuallySelected =
-      lineIdx === selectedLineIndex ||
-      (lineIdx === currentLineIndex && selectedLineIndex === -1);
-
-    if (isActuallySelected) {
-      setSelectedSentenceForAI({
-        text: line.text,
-        translation: line.translation_vn || "",
-      });
-      setSentenceExplanation(null);
-      handleExplainSentence(line.text);
-    } else {
-      setSelectedLineIndex(lineIdx);
-      onLineClick(line.start, line.start + line.duration);
-    }
-  };
-
-  const handleExplainSentence = async (text: string) => {
-    setIsAnalyzingSentence(true);
-    setSentenceExplanation(null);
-    try {
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        body: JSON.stringify({ sentence: text }),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) {
-        const { explanation } = await response.json();
-        setSentenceExplanation(explanation);
-      }
-    } catch (err) {
-      console.error("Sentence analysis failed:", err);
-    } finally {
-      setIsAnalyzingSentence(false);
-    }
-  };
-
-  const handleExplain = async () => {
-    if (!selectedWord) return;
-    setIsAnalyzing(true);
-    setExplanation(null);
-    try {
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        body: JSON.stringify({
-          sentence: selectedWord.sentence,
-          word: selectedWord.token.surface_form,
-        }),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) {
-        const { explanation } = await response.json();
-        setExplanation(explanation);
-      }
-    } catch (err) {
-      console.error("AI Analysis failed:", err);
-    } finally {
-      setIsAnalyzing(false);
     }
   };
 
@@ -269,7 +188,6 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
         onClick={() => {
           setSelectedWord(null);
           setSelectedLineIndex(-1);
-          setSelectedSentenceForAI(null);
         }}
       >
         <div className="p-2 md:p-4 leading-[1.8] md:leading-[2.5] text-lg md:text-2xl font-medium tracking-wide">
@@ -375,10 +293,7 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
 
                 {/* Bottom Layer: Sentence Translation */}
                 {line.translation_vn && (
-                  <div
-                    className="mt-4 pt-3 border-t border-[#58CC02]/20 cursor-help active:bg-[#58CC02]/10 rounded-lg transition-colors"
-                    onClick={(e) => handleSentenceClick(e, line, lIdx)}
-                  >
+                  <div className="mt-4 pt-3 border-t border-[#58CC02]/20 rounded-lg">
                     <p className="text-sm md:text-base font-bold text-[#58CC02] italic leading-relaxed">
                       {line.translation_vn}
                     </p>
@@ -389,73 +304,6 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
           })}
         </div>
       </div>
-
-      {/* Sentence Analysis Popover */}
-      {selectedSentenceForAI && (
-        <div
-          className={cn(
-            "fixed z-[100] bg-white border-2 border-[#E5E5E5] rounded-3xl shadow-2xl p-4 md:p-6 animate-in fade-in zoom-in duration-200 overflow-y-auto custom-scrollbar",
-            "w-[90vw] md:w-[500px] max-h-[80vh]",
-          )}
-          style={{
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            onClick={() => setSelectedSentenceForAI(null)}
-            className="absolute top-4 right-4 text-[#AFAFAF] hover:text-[#4B4B4B]"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          <div className="space-y-4">
-            <div>
-              <p className="text-xs font-bold text-[#58CC02] uppercase tracking-widest mb-1">
-                Original Sentence
-              </p>
-              <h3 className="text-xl md:text-2xl font-extrabold text-[#111111]">
-                {selectedSentenceForAI.text}
-              </h3>
-            </div>
-
-            <div className="bg-[#F7F7F7] rounded-2xl p-4">
-              <p className="text-xs font-bold text-[#AFAFAF] uppercase tracking-widest mb-1">
-                Vietnamese Meaning
-              </p>
-              <p className="text-[#4B4B4B] font-bold italic">
-                {selectedSentenceForAI.translation}
-              </p>
-            </div>
-
-            <div className="bg-[#FFF9E6] border-2 border-[#FFB800]/30 rounded-2xl p-4 prose prose-sm prose-stone max-w-none">
-              <div className="flex items-center gap-2 mb-3 text-[#FFB800] font-bold text-xs uppercase tracking-widest">
-                <Sparkles className="w-4 h-4" />
-                Grammar & Context Analysis
-              </div>
-
-              {isAnalyzingSentence ? (
-                <div className="flex flex-col items-center py-8 gap-3">
-                  <div className="w-8 h-8 border-4 border-[#FFB800] border-t-transparent rounded-full animate-spin"></div>
-                  <p className="text-xs font-bold text-[#FFB800] animate-pulse">
-                    Gemini is analyzing...
-                  </p>
-                </div>
-              ) : sentenceExplanation ? (
-                <div className="text-[#111111] leading-relaxed overflow-y-auto">
-                  <ReactMarkdown>{sentenceExplanation}</ReactMarkdown>
-                </div>
-              ) : (
-                <p className="text-[#AFAFAF] text-center py-4">
-                  Failed to load analysis.
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Word Deep-Dive Popover */}
       {selectedWord && (
@@ -614,19 +462,6 @@ export const TranscriptSidebar: React.FC<TranscriptSidebarProps> = ({
                 </div>
               )}
             </div>
-
-            {/* AI Explanation Content */}
-            {explanation && (
-              <div className="bg-[#FFF9E6] border-2 border-[#FFB800]/30 rounded-2xl p-4 prose prose-sm prose-stone">
-                <div className="flex items-center gap-2 mb-2 text-[#FFB800] font-bold text-xs uppercase tracking-widest">
-                  <Sparkles className="w-4 h-4" />
-                  AI Analysis
-                </div>
-                <div className="text-[#111111] leading-relaxed">
-                  <ReactMarkdown>{explanation}</ReactMarkdown>
-                </div>
-              </div>
-            )}
 
             {/* Action Buttons hidden per user request */}
           </div>
